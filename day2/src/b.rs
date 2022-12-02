@@ -1,100 +1,72 @@
+use day2::read_file;
+use day2::parse_file;
+
 pub fn solve() {
     let file = read_file();
-    let round_choices = parse_file(&file);
-    let mut total_points_rewarded = 0;
+    let rounds = parse_file(&file);
+    let mut total_score = 0;
 
-    for round in round_choices {
-        let (game, choice) = validate_game(round);
-        total_points_rewarded += calculate_points(game, choice);
+    for round in rounds {
+        let (raw_opponent_game_move, raw_desired_game_result) = round;
+        let opponent_game_move = map_to_game_move(raw_opponent_game_move);
+        let desired_game_result = map_to_desired_game_result(raw_desired_game_result);
+        let your_game_move = calculate_your_move(&desired_game_result, &opponent_game_move);
+        total_score += calculate_score(desired_game_result, your_game_move);
     }
 
-    println!("{}", total_points_rewarded);
+    println!("{}", total_score);
 }
 
-fn read_file() -> String {
-    std::fs::read_to_string("./src/input.txt")
-        .expect("Could not read file.")
-}
-
-fn parse_file(file: &str) -> Vec<(&str, &str)> {
-    let file_lines: Vec<&str> = file.trim().split("\r\n").collect();
-    let mut round_choices: Vec<(&str, &str)> = Vec::new();
-
-    for file_line in file_lines {
-        let round_choice = file_line.split_once(' ')
-            .expect("Input file not correct");
-        round_choices.push(round_choice);
-    }
-
-    round_choices
-}
-
-fn validate_game(choices: (&str, &str)) -> (Game, Choice) {
-    let (opponent_choice, end_game) = map_to_choices(choices);
-    let your_choice = match opponent_choice {
-        Choice::Rock => match end_game {
-            Game::Won => Choice::Paper,
-            Game::Equal => Choice::Rock,
-            Game::Lost => Choice::Scissors,
+fn calculate_your_move(desired_game_result: &GameResult, opponent_move: &GameMove) -> GameMove {
+    match opponent_move {
+        GameMove::Rock => match desired_game_result {
+            GameResult::Won => GameMove::Paper,
+            GameResult::Equal => GameMove::Rock,
+            GameResult::Lost => GameMove::Scissors,
         },
-        Choice::Paper => match end_game {
-            Game::Lost => Choice::Rock,
-            Game::Equal => Choice::Paper,
-            Game::Won => Choice::Scissors,
+        GameMove::Paper => match desired_game_result {
+            GameResult::Lost => GameMove::Rock,
+            GameResult::Equal => GameMove::Paper,
+            GameResult::Won => GameMove::Scissors,
         },
-        Choice::Scissors => match end_game {
-            Game::Won => Choice::Rock,
-            Game::Lost => Choice::Paper,
-            Game::Equal => Choice::Scissors,
+        GameMove::Scissors => match desired_game_result {
+            GameResult::Won => GameMove::Rock,
+            GameResult::Lost => GameMove::Paper,
+            GameResult::Equal => GameMove::Scissors,
         },
-    };
-
-    (end_game, your_choice)
-}
-
-fn map_to_choices(raw_choices: (&str, &str)) -> (Choice, Game) {
-    let (raw_opponent_choice, raw_your_choice) = raw_choices;
-    let opponent_choice = map_choice(raw_opponent_choice);
-    let game_end = map_game_end(raw_your_choice);
-    (opponent_choice, game_end)
-}
-
-fn map_choice(raw_choice: &str) -> Choice {
-    if raw_choice == "A" || raw_choice == "X" {
-        return Choice::Rock;
-    } else if raw_choice == "B" || raw_choice == "Y" {
-        return Choice::Paper;
-    } else if raw_choice == "C" || raw_choice == "Z" {
-        return Choice::Scissors;
     }
-
-    panic!();
 }
 
-fn map_game_end(raw_choice: &str) -> Game {
-    if raw_choice == "X" {
-        return Game::Lost;
-    } else if raw_choice == "Y" {
-        return Game::Equal;
-    } else if raw_choice == "Z" {
-        return Game::Won;
+fn map_to_game_move(raw_game_move: &str) -> GameMove {
+    match raw_game_move {
+        "A" => GameMove::Rock,
+        "B" => GameMove::Paper,
+        "C" => GameMove::Scissors,
+        _   => unreachable!("The input of opponent is always in (A,B,C)"),
     }
-
-    panic!();
 }
 
-fn calculate_points(game: Game, choice: Choice) -> i32 {
-    game as i32 + choice as i32
+fn map_to_desired_game_result(raw_game_move: &str) -> GameResult {
+    match raw_game_move {
+        "X" => GameResult::Lost,
+        "Y" => GameResult::Equal,
+        "Z" => GameResult::Won,
+        _   => unreachable!("The input for you is always in (X,Y,Z)"),
+    }
 }
 
-enum Choice {
-    Rock = 1,
-    Paper = 2,
+fn calculate_score(game_result: GameResult, game_move: GameMove) -> i32 {
+    game_result as i32 + game_move as i32
+}
+
+enum GameMove {
+    Rock     = 1,
+    Paper    = 2,
     Scissors = 3,
 }
 
-enum Game {
-    Won = 6,
+enum GameResult {
+    Won   = 6,
     Equal = 3,
-    Lost = 0
+    Lost  = 0
 }

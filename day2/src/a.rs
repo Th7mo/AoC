@@ -1,87 +1,67 @@
+use day2::read_file;
+use day2::parse_file;
+
 pub fn solve() {
     let file = read_file();
-    let round_choices = parse_file(&file);
-    let mut total_points_rewarded = 0;
+    let rounds = parse_file(&file);
+    let mut total_score = 0;
 
-    for round in round_choices {
-        let (game, choice) = validate_game(round);
-        total_points_rewarded += calculate_points(game, choice);
+    for round in rounds {
+        let (opponent_move, your_move) = map_to_round_moves(round);
+        let game_result = decide_game_result(&opponent_move, &your_move);
+        total_score += calculate_score_of_round(game_result, your_move);
     }
 
-    println!("{}", total_points_rewarded);
+    println!("{}", total_score);
 }
 
-fn read_file() -> String {
-    std::fs::read_to_string("./src/input.txt")
-        .expect("Could not read file.")
-}
-
-fn parse_file(file: &str) -> Vec<(&str, &str)> {
-    let file_lines: Vec<&str> = file.trim().split("\r\n").collect();
-    let mut round_choices: Vec<(&str, &str)> = Vec::new();
-
-    for file_line in file_lines {
-        let round_choice = file_line.split_once(' ')
-            .expect("Input file not correct");
-        round_choices.push(round_choice);
+fn decide_game_result(opponent_move: &GameMove, your_move: &GameMove) -> GameResult {
+    match opponent_move {
+        GameMove::Rock => match your_move {
+            GameMove::Rock => GameResult::Equal,
+            GameMove::Paper => GameResult::Won,
+            GameMove::Scissors => GameResult::Lost,
+        },
+        GameMove::Paper => match your_move {
+            GameMove::Rock => GameResult::Lost,
+            GameMove::Paper => GameResult::Equal,
+            GameMove::Scissors => GameResult::Won,
+        },
+        GameMove::Scissors => match your_move {
+            GameMove::Rock => GameResult::Won,
+            GameMove::Paper => GameResult::Lost,
+            GameMove::Scissors => GameResult::Equal,
+        },
     }
-
-    round_choices
 }
 
-fn validate_game(choices: (&str, &str)) -> (Game, Choice) {
-    let (opponent_choice, your_choice) = map_to_choices(choices);
-    let game_end = match opponent_choice {
-        Choice::Rock => match your_choice {
-            Choice::Rock => Game::Equal,
-            Choice::Paper => Game::Won,
-            Choice::Scissors => Game::Lost,
-        },
-        Choice::Paper => match your_choice {
-            Choice::Rock => Game::Lost,
-            Choice::Paper => Game::Equal,
-            Choice::Scissors => Game::Won,
-        },
-        Choice::Scissors => match your_choice {
-            Choice::Rock => Game::Won,
-            Choice::Paper => Game::Lost,
-            Choice::Scissors => Game::Equal,
-        },
-    };
-
-    (game_end, your_choice)
+fn map_to_round_moves(raw_game_moves: (&str, &str)) -> (GameMove, GameMove) {
+    let (raw_opponent_move, raw_your_move) = raw_game_moves;
+    let opponent_move = map_move_to_enum(raw_opponent_move);
+    let your_move = map_move_to_enum(raw_your_move);
+    (opponent_move, your_move)
 }
 
-fn map_to_choices(raw_choices: (&str, &str)) -> (Choice, Choice) {
-    let (raw_opponent_choice, raw_your_choice) = raw_choices;
-    let opponent_choice = map_choice(raw_opponent_choice);
-    let your_choice = map_choice(raw_your_choice);
-    (opponent_choice, your_choice)
-}
-
-fn map_choice(raw_choice: &str) -> Choice {
-    if raw_choice == "A" || raw_choice == "X" {
-        return Choice::Rock;
-    } else if raw_choice == "B" || raw_choice == "Y" {
-        return Choice::Paper;
-    } else if raw_choice == "C" || raw_choice == "Z" {
-        return Choice::Scissors;
+fn map_move_to_enum(raw_move: &str) -> GameMove {
+    match raw_move {
+        "A" | "X" => GameMove::Rock,
+        "B" | "Y" => GameMove::Paper,
+        "C" | "Z" => GameMove::Scissors,
+        _         => unreachable!("The input is always in (A,B,C) or (X,Y,Z)"),
     }
-
-    panic!()
 }
 
-fn calculate_points(game: Game, choice: Choice) -> i32 {
-    game as i32 + choice as i32
+fn calculate_score_of_round(game_result: GameResult, game_move: GameMove) -> i32 {
+    game_result as i32 + game_move as i32
 }
 
-enum Choice {
+enum GameMove {
     Rock = 1,
     Paper = 2,
     Scissors = 3,
 }
 
-enum Game {
+enum GameResult {
     Won = 6,
     Equal = 3,
     Lost = 0
