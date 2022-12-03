@@ -3,7 +3,7 @@ pub mod b;
 pub mod rucksack;
 pub mod group;
 pub mod priority;
-pub mod file_reader;
+pub mod file_parser;
 
 use std::collections::HashSet;
 

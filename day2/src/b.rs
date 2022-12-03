@@ -1,8 +1,7 @@
-use day2::read_file;
 use day2::parse_file;
 
 pub fn solve() {
-    let file = read_file();
+    let file = file_reader::read_file(env!("CARGO_PKG_NAME"));
     let rounds = parse_file(&file);
     let mut total_score = 0;
 

@@ -1,13 +1,8 @@
 use crate::rucksack::Rucksack;
 
 pub fn get_rucksacks() -> Vec<Rucksack> {
-    let file = read_file();
+    let file = file_reader::read_file(env!("CARGO_PKG_NAME"));
     parse_file(&file)
-}
-
-fn read_file() -> String {
-    std::fs::read_to_string("./src/input.txt")
-        .expect("Could not read file!")
 }
 
 fn parse_file(file: &str) -> Vec<Rucksack> {

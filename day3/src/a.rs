@@ -1,8 +1,8 @@
-use crate::file_reader;
+use crate::file_parser;
 use crate::priority::Priority;
 
 pub fn solve() {
-    let rucksacks = file_reader::get_rucksacks();
+    let rucksacks = file_parser::get_rucksacks();
     let mut total_priority = 0;
 
     for rucksack in rucksacks {

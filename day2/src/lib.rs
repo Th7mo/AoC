@@ -1,8 +1,3 @@
-pub fn read_file() -> String {
-    std::fs::read_to_string("./src/input.txt")
-        .expect("Could not read file.")
-}
-
 pub fn parse_file(file: &str) -> Vec<(&str, &str)> {
     let file_lines: Vec<&str> = file.trim().split("\r\n").collect();
     let mut round_choices: Vec<(&str, &str)> = Vec::new();

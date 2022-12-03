@@ -1,14 +1,8 @@
 pub fn solve() {
-    let file = read_file();
+    let file = file_reader::read_file(env!("CARGO_PKG_NAME"));
     let lines: Vec<&str> = file.split("\r\n").collect();
     let mut groups = convert_to_groups(lines);
     println!("{}", calc_highest_elfs(&mut groups));
-}
-
-fn read_file() -> String {
-    let file_path = "./src/input.txt";
-    std::fs::read_to_string(file_path)
-        .expect("Can't read file")
 }
 
 fn convert_to_groups(array: Vec<&str>) -> Vec<i32> {
