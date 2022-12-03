@@ -1,8 +1,6 @@
-use std::collections::HashSet;
+use crate::get_union_of;
 
-const POSSIBLE_ITEMS: &str ="abcdefghijklmnopqrstuvwxyz\
-                    ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
+#[derive(Clone)]
 pub struct Rucksack {
     pub first_compartment: String,
     pub second_compartment: String,
@@ -16,26 +14,11 @@ impl Rucksack {
         }
     }
 
-    pub fn get_priority_of_item(char_in_both_compartments: char) -> usize {
-        POSSIBLE_ITEMS.find(char_in_both_compartments)
-            .expect("could not find character in alphabet") + 1
+    pub fn shared_item_in_compartments(self) -> char {
+        get_union_of(&self.first_compartment, &self.second_compartment)[0]
     }
 
-    pub fn shared_item_in_compartments(self) -> char {
-        let mut known_elements: HashSet<char> = HashSet::new();
-
-        for item in self.first_compartment.chars() {
-            known_elements.insert(item);
-        }
-
-        for item in self.second_compartment.chars() {
-            if known_elements.contains(&item) {
-                return item;
-            }
-        }
-
-        unreachable!("Could not find character that is in both compartments!");
+    pub fn get_all_items(self) -> String {
+        self.first_compartment + &*self.second_compartment
     }
 }
-
-
