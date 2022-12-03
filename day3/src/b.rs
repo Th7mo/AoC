@@ -1,9 +1,9 @@
-use crate::get_rucksacks;
+use crate::file_reader;
 use crate::group::Group;
 use crate::priority::Priority;
 
 pub fn solve() {
-    let rucksacks = get_rucksacks();
+    let rucksacks = file_reader::get_rucksacks();
     let groups = Group::convert_to_groups(rucksacks);
     let mut total_priority = 0;
 
