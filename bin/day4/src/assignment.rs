@@ -10,9 +10,10 @@ impl Assignment {
     }
 
     fn map_to_i32s(instruction: &str) -> (i32, i32) {
-        let (first, last) = instruction
-            .split_once('-')
-            .unwrap_or_else(|| panic!("Missing '-' delimiter in {instruction}"));
+        let Some((first, last)) = instruction.split_once('-') else {
+            panic!("Missing '-' delimiter in {instruction}")
+        };
+    
         (first.parse().unwrap(), last.parse().unwrap())
     }
 }

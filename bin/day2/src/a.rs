@@ -48,6 +48,8 @@ fn map_move_to_enum(raw_move: &str) -> GameMove {
         "C" | "Z" => GameMove::Scissors,
         _ => unreachable!("The input is always in (A,B,C) or (X,Y,Z)"),
     }
+
+
 }
 
 fn calculate_score_of_round(game_result: GameResult, game_move: GameMove) -> i32 {

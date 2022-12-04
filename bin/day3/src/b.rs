@@ -4,7 +4,7 @@ use crate::priority::Priority;
 
 pub fn solve() {
     let rucksacks = file_parser::get_rucksacks();
-    let groups = Group::convert_to_groups(rucksacks);
+    let groups = Group::convert_to_groups(&rucksacks);
     let mut total_priority = 0;
 
     for group in groups {

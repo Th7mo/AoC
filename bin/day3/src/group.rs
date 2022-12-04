@@ -32,7 +32,7 @@ impl Group {
         common_element_of_all_three_rucksacks[0]
     }
 
-    pub fn convert_to_groups(rucksacks: Vec<Rucksack>) -> Vec<Group> {
+    pub fn convert_to_groups(rucksacks: &[Rucksack]) -> Vec<Group> {
         let group_chunks: Chunks<Rucksack> = rucksacks.chunks(3);
         let mut groups: Vec<Group> = Vec::new();
 
