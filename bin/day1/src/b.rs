@@ -1,9 +1,9 @@
 use crate::file_parser;
+use lib::file_reader;
 
 pub fn solve() {
-    let file = file_reader::read_file(env!("CARGO_PKG_NAME"));
-    let lines: Vec<&str> = file.split("\r\n").collect();
-    let mut groups = file_parser::convert_to_groups(lines);
+    let file = file_reader::file_in_lines(env!("CARGO_PKG_NAME"));
+    let mut groups = file_parser::convert_to_groups(file.lines());
     println!("{}", calc_highest_elves(&mut groups));
 }
 

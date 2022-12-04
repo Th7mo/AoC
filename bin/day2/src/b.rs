@@ -1,8 +1,9 @@
 use day2::parse_file;
+use lib::file_reader;
 
 pub fn solve() {
-    let file = file_reader::read_file(env!("CARGO_PKG_NAME"));
-    let rounds = parse_file(&file);
+    let file = file_reader::file_in_lines(env!("CARGO_PKG_NAME"));
+    let rounds = parse_file(file.lines());
     let mut total_score = 0;
 
     for round in rounds {

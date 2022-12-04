@@ -14,6 +14,6 @@ impl Assignment {
             panic!("Missing '-' delimiter in {instruction}")
         };
 
-        (first.parse().unwrap(), last.parse().unwrap())
+        (lib::i32_of(first), lib::i32_of(last))
     }
 }

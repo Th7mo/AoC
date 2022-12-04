@@ -1,13 +1,14 @@
 use crate::assignment::Assignment;
 use crate::pair::Pair;
+use lib::file_reader;
+use std::str::Lines;
 
 pub fn get_assignment_pairs() -> Vec<Pair> {
-    let file = file_reader::read_file(env!("CARGO_PKG_NAME"));
-    parse_file(&file)
+    let file = file_reader::file_in_lines(env!("CARGO_PKG_NAME"));
+    parse_file(file.lines())
 }
 
-fn parse_file(file: &str) -> Vec<Pair> {
-    let lines: Vec<&str> = file.trim().split("\r\n").collect();
+fn parse_file(lines: Lines) -> Vec<Pair> {
     let mut assignment_pairs: Vec<Pair> = Vec::new();
 
     for line in lines {
