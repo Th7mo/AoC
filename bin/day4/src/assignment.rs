@@ -13,7 +13,7 @@ impl Assignment {
         let Some((first, last)) = instruction.split_once('-') else {
             panic!("Missing '-' delimiter in {instruction}")
         };
-    
+
         (first.parse().unwrap(), last.parse().unwrap())
     }
 }
