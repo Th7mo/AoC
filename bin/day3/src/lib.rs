@@ -1,9 +1,9 @@
 pub mod a;
 pub mod b;
-pub mod rucksack;
-pub mod group;
-pub mod priority;
-pub mod file_parser;
+mod rucksack;
+mod group;
+mod priority;
+mod file_parser;
 
 use std::collections::HashSet;
 

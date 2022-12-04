@@ -1,6 +1,4 @@
-mod a;
-mod b;
-mod file_parser;
+use day4::{a, b};
 
 fn main() {
     a::solve();

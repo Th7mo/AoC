@@ -17,7 +17,7 @@ impl Group {
        }
     }
 
-    pub fn shared_item_in_rucksacks(self) -> char {
+    pub fn shared_item_in_rucksacks(&self) -> char {
         let common_elements_first_and_second = get_union_of(
             &self.first_rucksack.get_all_items(),
             &self.second_rucksack.get_all_items()

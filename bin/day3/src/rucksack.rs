@@ -14,11 +14,11 @@ impl Rucksack {
         }
     }
 
-    pub fn shared_item_in_compartments(self) -> char {
+    pub fn shared_item_in_compartments(&self) -> char {
         get_union_of(&self.first_compartment, &self.second_compartment)[0]
     }
 
-    pub fn get_all_items(self) -> String {
-        self.first_compartment + &*self.second_compartment
+    pub fn get_all_items(&self) -> String {
+        self.first_compartment.to_string() + &self.second_compartment
     }
 }
