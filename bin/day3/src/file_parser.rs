@@ -1,9 +1,8 @@
 use crate::rucksack::Rucksack;
-use lib::file_reader;
 use std::str::Lines;
 
 pub fn get_rucksacks() -> Vec<Rucksack> {
-    let file = file_reader::file_in_lines(env!("CARGO_PKG_NAME"));
+    let file = include_str!("input.txt");
     parse_file(file.lines())
 }
 

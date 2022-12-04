@@ -1,10 +1,9 @@
 use crate::assignment::Assignment;
 use crate::pair::Pair;
-use lib::file_reader;
 use std::str::Lines;
 
 pub fn get_assignment_pairs() -> Vec<Pair> {
-    let file = file_reader::file_in_lines(env!("CARGO_PKG_NAME"));
+    let file = include_str!("input.txt");
     parse_file(file.lines())
 }
 
