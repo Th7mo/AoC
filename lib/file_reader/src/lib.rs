@@ -5,5 +5,5 @@ pub fn read_file(project_folder_name: &str) -> String {
 }
 
 fn get_file_path(project_folder_name: &str) -> String {
-    "bin/".to_string() + project_folder_name + "/src/input.txt"
+    format!("bin/{project_folder_name}/src/input.txt")
 }

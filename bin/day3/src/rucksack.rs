@@ -19,6 +19,6 @@ impl Rucksack {
     }
 
     pub fn get_all_items(&self) -> String {
-        self.first_compartment.to_string() + &self.second_compartment
+        format!("{}{}", self.first_compartment, self.second_compartment)
     }
 }
