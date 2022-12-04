@@ -46,7 +46,7 @@ fn map_move_to_enum(raw_move: &str) -> GameMove {
         "A" | "X" => GameMove::Rock,
         "B" | "Y" => GameMove::Paper,
         "C" | "Z" => GameMove::Scissors,
-        _         => unreachable!("The input is always in (A,B,C) or (X,Y,Z)"),
+        _ => unreachable!("The input is always in (A,B,C) or (X,Y,Z)"),
     }
 }
 
@@ -63,5 +63,5 @@ enum GameMove {
 enum GameResult {
     Won = 6,
     Equal = 3,
-    Lost = 0
+    Lost = 0,
 }

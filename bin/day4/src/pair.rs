@@ -11,8 +11,8 @@ impl Pair {
     }
 
     pub fn assignment_fully_contains_other(&self) -> bool {
-        (self.left.first >= self.right.first && self.left.last <= self.right.last) ||
-        (self.right.first >= self.left.first && self.right.last <= self.left.last)
+        (self.left.first >= self.right.first && self.left.last <= self.right.last)
+            || (self.right.first >= self.left.first && self.right.last <= self.left.last)
     }
 
     pub fn assignments_have_shared_ids(&self) -> bool {
@@ -20,7 +20,7 @@ impl Pair {
     }
 
     fn is_in_range(left: &Assignment, right: &Assignment) -> bool {
-        (left.first >= right.first && left.first <= right.last) ||
-        (left.last >= right.first && left.last <= right.last)
+        (left.first >= right.first && left.first <= right.last)
+            || (left.last >= right.first && left.last <= right.last)
     }
 }

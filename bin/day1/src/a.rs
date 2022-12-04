@@ -8,8 +8,5 @@ pub fn solve() {
 }
 
 fn calc_highest_elf(sums: &[i32]) -> i32 {
-    *sums.iter().max()
-        .expect("array was probably empty")
+    *sums.iter().max().expect("array was probably empty")
 }
-
-

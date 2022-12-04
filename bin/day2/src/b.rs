@@ -41,7 +41,7 @@ fn map_to_game_move(raw_game_move: &str) -> GameMove {
         "A" => GameMove::Rock,
         "B" => GameMove::Paper,
         "C" => GameMove::Scissors,
-        _   => unreachable!("The input of opponent is always in (A,B,C)"),
+        _ => unreachable!("The input of opponent is always in (A,B,C)"),
     }
 }
 
@@ -50,7 +50,7 @@ fn map_to_desired_game_result(raw_game_move: &str) -> GameResult {
         "X" => GameResult::Lost,
         "Y" => GameResult::Equal,
         "Z" => GameResult::Won,
-        _   => unreachable!("The input for you is always in (X,Y,Z)"),
+        _ => unreachable!("The input for you is always in (X,Y,Z)"),
     }
 }
 
@@ -59,13 +59,13 @@ fn calculate_score(game_result: GameResult, game_move: GameMove) -> i32 {
 }
 
 enum GameMove {
-    Rock     = 1,
-    Paper    = 2,
+    Rock = 1,
+    Paper = 2,
     Scissors = 3,
 }
 
 enum GameResult {
-    Won   = 6,
+    Won = 6,
     Equal = 3,
-    Lost  = 0
+    Lost = 0,
 }

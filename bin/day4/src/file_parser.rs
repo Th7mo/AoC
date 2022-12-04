@@ -11,7 +11,8 @@ fn parse_file(file: &str) -> Vec<Pair> {
     let mut assignment_pairs: Vec<Pair> = Vec::new();
 
     for line in lines {
-        let (left_assignment, right_assignment) = line.split_once(',')
+        let (left_assignment, right_assignment) = line
+            .split_once(',')
             .expect("Input is not valid, missing ',' delimiter between tasks");
         let left_assignment = Assignment::new(left_assignment);
         let right_assignment = Assignment::new(right_assignment);
