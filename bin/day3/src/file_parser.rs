@@ -12,7 +12,7 @@ fn parse_file(file: &str) -> Vec<Rucksack> {
     for line in rucksacks {
         let middle_index = line.len() / 2;
         let compartments = line.split_at(middle_index);
-        let rucksack = Rucksack::new(compartments);
+        let rucksack = Rucksack::new(&compartments);
         rucksacks_with_compartments.push(rucksack);
     }
 

@@ -7,7 +7,7 @@ pub struct Rucksack {
 }
 
 impl Rucksack {
-    pub fn new(compartments: (&str, &str)) -> Rucksack {
+    pub fn new(compartments: &(&str, &str)) -> Rucksack {
         Rucksack {
             first_compartment: compartments.0.to_string(),
             second_compartment: compartments.1.to_string(),
