@@ -3,34 +3,30 @@ use crate::rucksack::Rucksack;
 use std::slice::Chunks;
 
 pub struct Group {
-    pub first_rucksack: Rucksack,
-    pub second_rucksack: Rucksack,
-    pub third_rucksack: Rucksack,
+    pub rucksack1: Rucksack,
+    pub rucksack2: Rucksack,
+    pub rucksack3: Rucksack,
 }
 
 impl Group {
-    pub fn new(
-        first_rucksack: Rucksack,
-        second_rucksack: Rucksack,
-        third_rucksack: Rucksack,
-    ) -> Group {
+    pub fn new(rucksack1: Rucksack, rucksack2: Rucksack, rucksack3: Rucksack) -> Group {
         Group {
-            first_rucksack,
-            second_rucksack,
-            third_rucksack,
+            rucksack1,
+            rucksack2,
+            rucksack3,
         }
     }
 
     pub fn shared_item_in_rucksacks(&self) -> char {
         let common_elements_first_and_second = get_union_of(
-            &self.first_rucksack.get_all_items(),
-            &self.second_rucksack.get_all_items(),
+            &self.rucksack1.get_all_items(),
+            &self.rucksack2.get_all_items(),
         );
         let common_elements_first_and_second: String =
             common_elements_first_and_second.iter().collect();
         let common_element_of_all_three_rucksacks = get_union_of(
             &common_elements_first_and_second,
-            &self.third_rucksack.get_all_items(),
+            &self.rucksack3.get_all_items(),
         );
 
         common_element_of_all_three_rucksacks[0]
