@@ -1,4 +1,4 @@
-use lib::i32_of;
+use crate::i32_of;
 use std::str::Lines;
 
 pub fn convert_to_groups(lines: Lines) -> Vec<i32> {

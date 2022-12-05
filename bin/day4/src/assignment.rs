@@ -1,3 +1,5 @@
+use crate::i32_of;
+
 pub struct Assignment {
     pub first: i32,
     pub last: i32,
@@ -14,6 +16,6 @@ impl Assignment {
             panic!("Missing '-' delimiter in {instruction}")
         };
 
-        (lib::i32_of(first), lib::i32_of(last))
+        (i32_of(first), i32_of(last))
     }
 }
