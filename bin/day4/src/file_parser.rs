@@ -18,6 +18,5 @@ fn parse_file(lines: Lines) -> Vec<Pair> {
         let right_assignment = Assignment::new(right_assignment);
         assignment_pairs.push(Pair::new(left_assignment, right_assignment));
     }
-
     assignment_pairs
 }

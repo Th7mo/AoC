@@ -34,6 +34,6 @@ impl Stack {
     }
 
     pub fn last(&self) -> char {
-        self.items.last().expect("stack is empty").clone()
+        *self.items.last().expect("stack is empty")
     }
 }

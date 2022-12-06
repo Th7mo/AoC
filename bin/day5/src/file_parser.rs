@@ -16,11 +16,5 @@ fn get_depot(depot_str: &str) -> Depot {
 }
 
 fn get_instructions(instruction_str: &str) -> Vec<Instruction> {
-    let mut instructions = Vec::new();
-
-    for line in instruction_str.lines() {
-        instructions.push(Instruction::new(line));
-    }
-
-    instructions
+    instruction_str.lines().map(Instruction::new).collect()
 }

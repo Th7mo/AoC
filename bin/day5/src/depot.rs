@@ -17,7 +17,7 @@ impl Depot {
         lines.reverse();
         for line in lines {
             for (index, char) in line.chars().enumerate() {
-                if Depot::is_char_in_crate(char) {
+                if Depot::is_char_a_letter(char) {
                     let stack_index = Depot::get_stack_index(index);
                     self.add_to_stack(stack_index, char);
                 }
@@ -25,7 +25,7 @@ impl Depot {
         }
     }
 
-    fn is_char_in_crate(char: char) -> bool {
+    fn is_char_a_letter(char: char) -> bool {
         char != ' ' && char != '[' && char != ']'
     }
 
@@ -34,11 +34,17 @@ impl Depot {
     }
 
     fn add_to_stack(&mut self, stack_index: usize, item: char) {
-        self.ensure_enough_stacks(stack_index);
-        let stack = self.stacks.get_mut(stack_index);
-        stack
-            .expect("Allocated more stacks but still could not find stack at index")
-            .add_new(item)
+        let stack = self.stacks.get(stack_index);
+
+        if stack.is_none() {
+            self.ensure_enough_stacks(stack_index);
+        }
+
+        let stack = self
+            .stacks
+            .get_mut(stack_index)
+            .expect("allocated more space but could still not find Stack");
+        stack.add_new(item);
     }
 
     fn ensure_enough_stacks(&mut self, stack_index: usize) {
