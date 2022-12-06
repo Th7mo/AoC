@@ -34,9 +34,7 @@ impl Depot {
     }
 
     fn add_to_stack(&mut self, stack_index: usize, item: char) {
-        let stack = self.stacks.get(stack_index);
-
-        if stack.is_none() {
+        if self.has_not_enough_space(stack_index) {
             self.ensure_enough_stacks(stack_index);
         }
 
@@ -45,6 +43,10 @@ impl Depot {
             .get_mut(stack_index)
             .expect("allocated more space but could still not find Stack");
         stack.add_new(item);
+    }
+
+    fn has_not_enough_space(&self, stack_index: usize) -> bool {
+        self.stacks.get(stack_index).is_none()
     }
 
     fn ensure_enough_stacks(&mut self, stack_index: usize) {

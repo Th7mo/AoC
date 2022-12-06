@@ -6,8 +6,14 @@ pub struct Pair {
 }
 
 impl Pair {
-    pub fn new(left: Assignment, right: Assignment) -> Self {
-        Pair { left, right }
+    pub fn new(assignments: &str) -> Self {
+        let (left_assignment, right_assignment) = assignments
+            .split_once(',')
+            .expect("Input is not valid, missing ',' delimiter between tasks");
+        Pair {
+            left: Assignment::new(left_assignment),
+            right: Assignment::new(right_assignment),
+        }
     }
 
     pub fn assignment_fully_contains_other(&self) -> bool {
