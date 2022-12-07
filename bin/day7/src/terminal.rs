@@ -1,7 +1,7 @@
+use crate::command::Command;
 use crate::dir::Dir;
 use crate::dir_stack::DirStack;
 use crate::file_manager::FileManager;
-use crate::line::Line;
 
 pub struct Terminal {
     threshold: Option<u32>,
@@ -34,17 +34,23 @@ impl Terminal {
 
     fn execute_commands(&mut self, commands: &str) {
         for terminal_line in commands.lines() {
-            let line = Line::from(terminal_line);
+            if Terminal::is_useless_command(terminal_line) {
+                continue;
+            }
+            let line = Command::from(terminal_line);
             self.interpreter_line(line);
         }
         self.drain_stack_remainder();
     }
 
-    fn interpreter_line(&mut self, line: Line) {
+    fn is_useless_command(command: &str) -> bool {
+        command.starts_with("$ ls") || command.starts_with("dir")
+    }
+
+    fn interpreter_line(&mut self, line: Command) {
         match line {
-            Line::Cd(line) => self.change_directory(line),
-            Line::ListFile(line) => self.dir_stack.add_size_to_current_dir(line),
-            _ => (),
+            Command::Cd(line) => self.change_directory(line),
+            Command::File(line) => self.dir_stack.add_size_to_current_dir(line),
         }
     }
 
