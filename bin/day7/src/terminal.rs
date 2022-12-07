@@ -40,13 +40,6 @@ impl Terminal {
         self.drain_stack_remainder();
     }
 
-    pub fn drain_stack_remainder(&mut self) {
-        for _ in 0..self.dir_stack.size() {
-            let dropped_dir = self.dir_stack.move_up_dir();
-            self.add_to_file_manager(dropped_dir);
-        }
-    }
-
     fn interpreter_line(&mut self, line: Line) {
         match line {
             Line::Cd(line) => self.change_directory(line),
@@ -80,6 +73,13 @@ impl Terminal {
                 }
             }
             None => self.file_manager.add_dir(dir),
+        }
+    }
+
+    pub fn drain_stack_remainder(&mut self) {
+        for _ in 0..self.dir_stack.size() {
+            let dropped_dir = self.dir_stack.move_up_dir();
+            self.add_to_file_manager(dropped_dir);
         }
     }
 
