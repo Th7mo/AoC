@@ -49,7 +49,7 @@ impl Terminal {
 
     fn interpreter_line(&mut self, line: Command) {
         match line {
-            Command::Cd(line) => self.change_directory(line),
+            Command::CD(line) => self.change_directory(line),
             Command::File(line) => self.dir_stack.add_size_to_current_dir(line),
         }
     }
