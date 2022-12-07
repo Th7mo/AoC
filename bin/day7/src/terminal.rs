@@ -1,26 +1,35 @@
 use crate::dir::Dir;
+use crate::dir_stack::DirStack;
+use crate::file_manager::FileManager;
 use crate::line::Line;
 
 pub struct Terminal {
-    stack: Vec<Dir>,
-    threshold: u32,
-    dirs_lower_than_threshold: Vec<Dir>,
+    threshold: Option<u32>,
+    dir_stack: DirStack,
+    file_manager: FileManager,
 }
 
 impl Terminal {
     pub fn new() -> Self {
         Terminal {
-            stack: Vec::new(),
-            threshold: 0,
-            dirs_lower_than_threshold: Vec::new(),
+            threshold: None,
+            dir_stack: DirStack::new(),
+            file_manager: FileManager::new(),
         }
     }
 
-    pub fn get_sum_of_dirs_lower_then_threshold(&mut self, threshold: u32) -> u32 {
+    pub fn set_threshold(&mut self, threshold: Option<u32>) {
         self.threshold = threshold;
+    }
+
+    pub fn get_size_of_dirs(&mut self) -> u32 {
+        self.calculate_size_of_dirs();
+        self.file_manager.size_of_all_dirs()
+    }
+
+    fn calculate_size_of_dirs(&mut self) {
         let commands = include_str!("input.txt");
         self.execute_commands(commands);
-        self.size_of_all_dirs()
     }
 
     fn execute_commands(&mut self, commands: &str) {
@@ -31,12 +40,18 @@ impl Terminal {
         self.drain_stack_remainder();
     }
 
+    pub fn drain_stack_remainder(&mut self) {
+        for _ in 0..self.dir_stack.size() {
+            let dropped_dir = self.dir_stack.move_up_dir();
+            self.add_to_file_manager(dropped_dir);
+        }
+    }
+
     fn interpreter_line(&mut self, line: Line) {
         match line {
             Line::Cd(line) => self.change_directory(line),
-            Line::Ls(_) => (),
-            Line::ListFile(line) => self.add_to_current_dir(line),
-            Line::ListDir(_) => (),
+            Line::ListFile(line) => self.dir_stack.add_size_to_current_dir(line),
+            _ => (),
         }
     }
 
@@ -46,9 +61,10 @@ impl Terminal {
             .expect("incorrect instruction set")
             .1;
         if Terminal::is_move_up_command(dir_name) {
-            self.move_up_dir();
+            let popped_dir = self.dir_stack.move_up_dir();
+            self.add_to_file_manager(popped_dir);
         } else {
-            self.add_new_dir();
+            self.dir_stack.add_new_dir();
         }
     }
 
@@ -56,56 +72,20 @@ impl Terminal {
         dir_name == ".."
     }
 
-    fn move_up_dir(&mut self) {
-        let latest_dir = self.stack.pop().expect("can't move out of / dir");
-        let latest_dir_size = latest_dir.size();
-        if latest_dir.smaller_than(self.threshold) {
-            self.dirs_lower_than_threshold.push(latest_dir);
+    fn add_to_file_manager(&mut self, dir: Dir) {
+        match self.threshold {
+            Some(threshold) => {
+                if dir.smaller_than(threshold) {
+                    self.file_manager.add_dir(dir);
+                }
+            }
+            None => self.file_manager.add_dir(dir),
         }
-
-        self.stack.last_mut().unwrap().add(latest_dir_size);
-    }
-
-    fn add_new_dir(&mut self) {
-        self.stack.push(Dir::new());
-    }
-
-    fn add_to_current_dir(&mut self, line: &str) {
-        let file_size = line.split_once(' ').expect("incorrect instruction set").0;
-        let file_size_as_u32: u32 = file_size.parse().unwrap();
-        self.stack
-            .last_mut()
-            .expect("stack is empty")
-            .add(file_size_as_u32);
-    }
-
-    fn drain_stack_remainder(&mut self) {
-        for _ in 0..self.stack.len() - 1 {
-            self.move_up_dir();
-        }
-    }
-
-    fn size_of_all_dirs(&self) -> u32 {
-        self.dirs_lower_than_threshold
-            .iter()
-            .map(|dir| dir.size())
-            .sum()
     }
 
     pub fn get_dir_size_needed_to_update(&mut self, disk_space: u32, required: u32) -> u32 {
-        self.get_sum_of_dirs_lower_then_threshold(disk_space);
-        let used_size = self.stack.first().unwrap().size();
-        let target_size = required - (disk_space - used_size);
-        self.get_lowest_dir_candidate(target_size)
-    }
-
-    fn get_lowest_dir_candidate(&mut self, target_size: u32) -> u32 {
-        let mut closest_size_to_target = u32::MAX;
-        for dir in &self.dirs_lower_than_threshold {
-            if dir.size() > target_size && dir.smaller_than(closest_size_to_target) {
-                closest_size_to_target = dir.size();
-            }
-        }
-        closest_size_to_target
+        self.calculate_size_of_dirs();
+        self.file_manager
+            .get_dir_size_needed_to_update(disk_space, required)
     }
 }
