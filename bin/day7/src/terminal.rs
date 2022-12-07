@@ -66,14 +66,11 @@ impl Terminal {
     }
 
     fn add_to_file_manager(&mut self, dir: Dir) {
-        match self.threshold {
-            Some(threshold) => {
-                if dir.smaller_than(threshold) {
-                    self.file_manager.add_dir(dir);
-                }
-            }
-            None => self.file_manager.add_dir(dir),
+        if self.threshold.is_some() && !dir.smaller_than(self.threshold.unwrap()) {
+            return;
         }
+
+        self.file_manager.add_dir(dir);
     }
 
     pub fn drain_stack_remainder(&mut self) {
