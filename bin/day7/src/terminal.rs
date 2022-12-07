@@ -24,7 +24,7 @@ impl Terminal {
 
     pub fn get_size_of_dirs(&mut self) -> u32 {
         self.calculate_size_of_dirs();
-        self.file_manager.size_of_all_dirs()
+        self.file_manager.sum_of_all_dirs()
     }
 
     fn calculate_size_of_dirs(&mut self) {
@@ -89,6 +89,6 @@ impl Terminal {
     pub fn get_dir_size_needed_to_update(&mut self, disk_space: u32, required: u32) -> u32 {
         self.calculate_size_of_dirs();
         self.file_manager
-            .get_dir_size_needed_to_update(disk_space, required)
+            .get_dir_size_for_removal(disk_space, required)
     }
 }
