@@ -130,7 +130,7 @@ impl Forest {
     }
 
     fn scenic_score_to_right(&self, row: usize, col: usize) -> u32 {
-        let tree = self.matrix.get(row).unwrap().get(col).unwrap();
+        let tree = self.get_tree_at(row, col);
         let mut scenic_score_to_right = 0;
         for col_copy in col..self.size() {
             if col_copy == col {
@@ -194,11 +194,32 @@ impl Forest {
     }
 
     fn get_tree_at(&self, row: usize, col: usize) -> &Tree {
-        self.matrix.get(row).unwrap().get(col).unwrap()
+        let Some(row) = self.matrix.get(row) else {
+            panic!("{}", Self::row_not_found_message(row, self.size()));
+        };
+        let Some(tree) = row.get(col) else {
+            panic!("{}", Self::tree_not_found_message(col, self.size()));
+        };
+        tree
     }
 
     fn get_mut_tree_at(&mut self, row: usize, col: usize) -> &mut Tree {
-        self.matrix.get_mut(row).unwrap().get_mut(col).unwrap()
+        let size = self.size();
+        let Some(mut_row) = self.matrix.get_mut(row) else {
+            panic!("{}", Self::row_not_found_message(row, size));
+        };
+        let Some(mut_tree) = mut_row.get_mut(col) else {
+            panic!("{}", Self::tree_not_found_message(col, size));
+        };
+        mut_tree
+    }
+
+    fn row_not_found_message(row: usize, size: usize) -> String {
+        format!("could not get row at index {row}! size of matrix is {size}")
+    }
+
+    fn tree_not_found_message(col: usize, size: usize) -> String {
+        format!("could not get tree at index {col}! size of matrix is {size}")
     }
 
     fn size(&self) -> usize {
