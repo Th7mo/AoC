@@ -170,13 +170,7 @@ impl Forest {
                 break;
             }
         }
-
         let tree = self.matrix.get_mut(row).unwrap().get_mut(col).unwrap();
-        println!("{}", scenic_score_to_left);
-        println!("{}", scenic_score_to_right);
-        println!("{}", scenic_score_to_down);
-        println!("{}\n\n", scenic_score_to_up);
-
         tree.scenic_score = scenic_score_to_right
             * scenic_score_to_left
             * scenic_score_to_up
