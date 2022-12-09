@@ -5,7 +5,7 @@ pub struct Instruction {
 }
 
 impl Instruction {
-    pub fn new(line: &str) -> Self {
+    pub fn from(line: &str) -> Self {
         let line = line.replace("move ", "");
         let Some((move_count, remainder)) = line.split_once(" from ") else {
             panic!("incorrect instruction set! Make sure ' from ' keyword is in input.txt");
