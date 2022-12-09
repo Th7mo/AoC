@@ -6,9 +6,9 @@ pub struct Depot {
 }
 
 impl Depot {
-    pub fn new(input_str: &str) -> Self {
+    pub fn from(input_str: &str) -> Self {
         let mut depot = Depot { stacks: Vec::new() };
-        depot.fill(input_str);
+        depot.fill(input_str.trim_end());
         depot
     }
 
