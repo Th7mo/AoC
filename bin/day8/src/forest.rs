@@ -39,10 +39,10 @@ impl Forest {
 
     fn iterate_to_down(&mut self) {
         let size = self.matrix.len();
-        for i in 0..size {
+        for row in 0..size {
             let mut highest_tree_height = 0;
-            for j in 0..size {
-                highest_tree_height = self.update_tree_column(j, i, highest_tree_height);
+            for column in 0..size {
+                highest_tree_height = self.update_tree_column(column, row, highest_tree_height);
             }
         }
     }
