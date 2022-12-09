@@ -1,7 +1,7 @@
 use crate::forest_factory::ForestFactory;
 
-pub fn solve() {
+pub fn solve() -> u32 {
     let input_str = include_str!("input.txt");
     let mut forest = ForestFactory::create_forest(input_str);
-    println!("{}", forest.visible_trees())
+    forest.visible_trees()
 }

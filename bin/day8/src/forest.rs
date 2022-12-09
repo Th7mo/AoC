@@ -96,4 +96,90 @@ impl Forest {
         }
         visible_trees
     }
+
+    pub fn highest_scenic_score(&mut self) -> u32 {
+        self.set_scenic_scores();
+        let mut highest_scenic_score = 0;
+        for row in &self.matrix {
+            for tree in row {
+                if tree.scenic_score > highest_scenic_score {
+                    highest_scenic_score = tree.scenic_score;
+                }
+            }
+        }
+        highest_scenic_score
+    }
+
+    fn set_scenic_scores(&mut self) {
+        let size = self.matrix.len();
+        for row in 0..size {
+            for col in 0..size {
+                self.calc_scenic_score_for_tree(row, col);
+            }
+        }
+    }
+
+    fn calc_scenic_score_for_tree(&mut self, row: usize, col: usize) {
+        let size = self.matrix.len();
+        let tree = self.matrix.get(row).unwrap().get(col).unwrap();
+
+        let mut scenic_score_to_right = 0;
+        for col_copy in col..size {
+            if col_copy == col {
+                continue;
+            }
+            scenic_score_to_right += 1;
+            let next_tree = self.matrix.get(row).unwrap().get(col_copy).unwrap();
+            if !tree.higher_than(next_tree.height) {
+                break;
+            }
+        }
+
+        let mut scenic_score_to_left = 0;
+        for col_copy in (0..col).rev() {
+            if col_copy == col {
+                continue;
+            }
+            scenic_score_to_left += 1;
+            let next_tree = self.matrix.get(row).unwrap().get(col_copy).unwrap();
+            if !tree.higher_than(next_tree.height) {
+                break;
+            }
+        }
+
+        let mut scenic_score_to_down = 0;
+        for row_copy in row..size {
+            if row_copy == row {
+                continue;
+            }
+            scenic_score_to_down += 1;
+            let next_tree = self.matrix.get(row_copy).unwrap().get(col).unwrap();
+            if !tree.higher_than(next_tree.height) {
+                break;
+            }
+        }
+
+        let mut scenic_score_to_up = 0;
+        for row_copy in (0..row).rev() {
+            if row_copy == row {
+                continue;
+            }
+            scenic_score_to_up += 1;
+            let next_tree = self.matrix.get(row_copy).unwrap().get(col).unwrap();
+            if !tree.higher_than(next_tree.height) {
+                break;
+            }
+        }
+
+        let tree = self.matrix.get_mut(row).unwrap().get_mut(col).unwrap();
+        println!("{}", scenic_score_to_left);
+        println!("{}", scenic_score_to_right);
+        println!("{}", scenic_score_to_down);
+        println!("{}\n\n", scenic_score_to_up);
+
+        tree.scenic_score = scenic_score_to_right
+            * scenic_score_to_left
+            * scenic_score_to_up
+            * scenic_score_to_down;
+    }
 }

@@ -1,5 +1,6 @@
-use day8::a;
+use day8::{a, b};
 
 fn main() {
-    a::solve();
+    println!("{}", a::solve());
+    println!("{}", b::solve());
 }

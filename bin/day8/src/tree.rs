@@ -1,6 +1,7 @@
 pub struct Tree {
     pub height: u8,
     pub visible: bool,
+    pub scenic_score: u32,
 }
 
 impl Tree {
@@ -8,6 +9,7 @@ impl Tree {
         Tree {
             height: Self::u8_of(height),
             visible: false,
+            scenic_score: 0,
         }
     }
 
