@@ -9,7 +9,6 @@ impl ForestFactory {
         for row in input.lines() {
             Self::add_row(&mut forest, row)
         }
-
         forest
     }
 

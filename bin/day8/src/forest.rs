@@ -22,53 +22,55 @@ impl Forest {
     }
 
     fn iterate_to_right(&mut self) {
+        let size = self.size();
         for row in self.matrix.iter_mut() {
-            Self::update_trees(row);
+            Self::update_trees(row, size);
         }
     }
 
     fn iterate_to_left(&mut self) {
-        let size = self.matrix.len();
-        for i in 0..size {
+        for i in 0..self.size() {
             let mut highest_tree_height = 0;
-            for j in (0..size).rev() {
+            for j in (0..self.size()).rev() {
                 highest_tree_height = self.update_tree_column(i, j, highest_tree_height);
             }
         }
     }
 
     fn iterate_to_down(&mut self) {
-        let size = self.matrix.len();
-        for row in 0..size {
+        for row in 0..self.size() {
             let mut highest_tree_height = 0;
-            for column in 0..size {
+            for column in 0..self.size() {
                 highest_tree_height = self.update_tree_column(column, row, highest_tree_height);
             }
         }
     }
 
     fn iterate_to_up(&mut self) {
-        let size = self.matrix.len();
-        for i in 0..size {
+        for i in 0..self.size() {
             let mut highest_tree_height = 0;
-            for j in (0..size).rev() {
+            for j in (0..self.size()).rev() {
                 highest_tree_height = self.update_tree_column(j, i, highest_tree_height);
             }
         }
     }
 
-    fn update_tree_column(&mut self, j: usize, i: usize, highest: u8) -> u8 {
-        let size = self.matrix.len();
-        let tree = self.matrix.get_mut(j).unwrap().get_mut(i).unwrap();
-        if j == 0 || j == size - 1 || i == 0 || i == size - 1 {
+    fn update_tree_column(&mut self, row: usize, col: usize, highest: u8) -> u8 {
+        if self.is_edge_tree(row, col) {
+            let tree = self.get_mut_tree_at(row, col);
             tree.visible = true;
         }
+
+        let tree = self.get_mut_tree_at(row, col);
         Self::update_tree(tree, highest)
     }
 
-    fn update_trees(row: &mut Vec<Tree>) {
+    fn is_edge_tree(&self, row: usize, col: usize) -> bool {
+        row == 0 || row == self.size() - 1 || col == 0 || col == self.size() - 1
+    }
+
+    fn update_trees(row: &mut [Tree], size: usize) {
         let mut highest_tree_height = 0;
-        let size = row.len();
         for (index, tree) in row.iter_mut().enumerate() {
             if index == 0 || index == size - 1 {
                 tree.visible = true;
@@ -111,70 +113,95 @@ impl Forest {
     }
 
     fn set_scenic_scores(&mut self) {
-        let size = self.matrix.len();
-        for row in 0..size {
-            for col in 0..size {
+        for row in 0..self.size() {
+            for col in 0..self.size() {
                 self.calc_scenic_score_for_tree(row, col);
             }
         }
     }
 
     fn calc_scenic_score_for_tree(&mut self, row: usize, col: usize) {
-        let size = self.matrix.len();
-        let tree = self.matrix.get(row).unwrap().get(col).unwrap();
+        let scenic_score = self.scenic_score_to_right(row, col)
+            * self.scenic_score_to_left(row, col)
+            * self.scenic_score_to_down(row, col)
+            * self.scenic_score_to_up(row, col);
+        let tree = self.get_mut_tree_at(row, col);
+        tree.scenic_score = scenic_score;
+    }
 
+    fn scenic_score_to_right(&self, row: usize, col: usize) -> u32 {
+        let tree = self.matrix.get(row).unwrap().get(col).unwrap();
         let mut scenic_score_to_right = 0;
-        for col_copy in col..size {
+        for col_copy in col..self.size() {
             if col_copy == col {
                 continue;
             }
             scenic_score_to_right += 1;
-            let next_tree = self.matrix.get(row).unwrap().get(col_copy).unwrap();
+            let next_tree = self.get_tree_at(row, col_copy);
             if tree.smaller_or_equal_to(next_tree) {
                 break;
             }
         }
+        scenic_score_to_right
+    }
 
+    fn scenic_score_to_left(&self, row: usize, col: usize) -> u32 {
+        let tree = self.get_tree_at(row, col);
         let mut scenic_score_to_left = 0;
         for col_copy in (0..col).rev() {
             if col_copy == col {
                 continue;
             }
             scenic_score_to_left += 1;
-            let next_tree = self.matrix.get(row).unwrap().get(col_copy).unwrap();
+            let next_tree = self.get_tree_at(row, col_copy);
             if tree.smaller_or_equal_to(next_tree) {
                 break;
             }
         }
+        scenic_score_to_left
+    }
 
+    fn scenic_score_to_down(&self, row: usize, col: usize) -> u32 {
+        let tree = self.get_tree_at(row, col);
         let mut scenic_score_to_down = 0;
-        for row_copy in row..size {
+        for row_copy in row..self.size() {
             if row_copy == row {
                 continue;
             }
             scenic_score_to_down += 1;
-            let next_tree = self.matrix.get(row_copy).unwrap().get(col).unwrap();
+            let next_tree = self.get_tree_at(row_copy, col);
             if tree.smaller_or_equal_to(next_tree) {
                 break;
             }
         }
+        scenic_score_to_down
+    }
 
+    fn scenic_score_to_up(&self, row: usize, col: usize) -> u32 {
+        let tree = self.get_tree_at(row, col);
         let mut scenic_score_to_up = 0;
         for row_copy in (0..row).rev() {
             if row_copy == row {
                 continue;
             }
             scenic_score_to_up += 1;
-            let next_tree = self.matrix.get(row_copy).unwrap().get(col).unwrap();
+            let next_tree = self.get_tree_at(row_copy, col);
             if tree.smaller_or_equal_to(next_tree) {
                 break;
             }
         }
+        scenic_score_to_up
+    }
 
-        let tree = self.matrix.get_mut(row).unwrap().get_mut(col).unwrap();
-        tree.scenic_score = scenic_score_to_right
-            * scenic_score_to_left
-            * scenic_score_to_up
-            * scenic_score_to_down;
+    fn get_tree_at(&self, row: usize, col: usize) -> &Tree {
+        self.matrix.get(row).unwrap().get(col).unwrap()
+    }
+
+    fn get_mut_tree_at(&mut self, row: usize, col: usize) -> &mut Tree {
+        self.matrix.get_mut(row).unwrap().get_mut(col).unwrap()
+    }
+
+    fn size(&self) -> usize {
+        self.matrix.len()
     }
 }
