@@ -20,4 +20,8 @@ impl Tree {
     pub fn higher_than(&self, height: u8) -> bool {
         self.height > height
     }
+
+    pub fn smaller_or_equal_to(&self, other: &Self) -> bool {
+        self.height <= other.height
+    }
 }

@@ -130,7 +130,7 @@ impl Forest {
             }
             scenic_score_to_right += 1;
             let next_tree = self.matrix.get(row).unwrap().get(col_copy).unwrap();
-            if !tree.higher_than(next_tree.height) {
+            if tree.smaller_or_equal_to(next_tree) {
                 break;
             }
         }
@@ -142,7 +142,7 @@ impl Forest {
             }
             scenic_score_to_left += 1;
             let next_tree = self.matrix.get(row).unwrap().get(col_copy).unwrap();
-            if !tree.higher_than(next_tree.height) {
+            if tree.smaller_or_equal_to(next_tree) {
                 break;
             }
         }
@@ -154,7 +154,7 @@ impl Forest {
             }
             scenic_score_to_down += 1;
             let next_tree = self.matrix.get(row_copy).unwrap().get(col).unwrap();
-            if !tree.higher_than(next_tree.height) {
+            if tree.smaller_or_equal_to(next_tree) {
                 break;
             }
         }
@@ -166,7 +166,7 @@ impl Forest {
             }
             scenic_score_to_up += 1;
             let next_tree = self.matrix.get(row_copy).unwrap().get(col).unwrap();
-            if !tree.higher_than(next_tree.height) {
+            if tree.smaller_or_equal_to(next_tree) {
                 break;
             }
         }
