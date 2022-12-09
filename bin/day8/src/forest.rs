@@ -14,8 +14,8 @@ impl Forest {
     }
 
     pub fn visible_trees(&mut self) -> u32 {
-        self.iterate_to_left();
         self.iterate_to_right();
+        self.iterate_to_left();
         self.iterate_to_down();
         self.iterate_to_up();
         self.amount_of_visible_trees()
@@ -28,31 +28,42 @@ impl Forest {
     }
 
     fn iterate_to_left(&mut self) {
-        for row in self.matrix.iter_mut().rev() {
-            Self::update_trees(row);
+        let size = self.matrix.len();
+        for i in 0..size {
+            let mut highest_tree_height = 0;
+            for j in (0..size).rev() {
+                highest_tree_height = self.update_tree_column(i, j, highest_tree_height);
+            }
         }
     }
 
     fn iterate_to_down(&mut self) {
-        let mut highest_tree_height = 0;
         let size = self.matrix.len();
         for i in 0..size {
+            let mut highest_tree_height = 0;
             for j in 0..size {
-                let tree = self.matrix.get_mut(j).unwrap().get_mut(i).unwrap();
-                highest_tree_height = Self::update_tree(tree, highest_tree_height);
+                highest_tree_height = self.update_tree_column(j, i, highest_tree_height);
             }
         }
     }
 
     fn iterate_to_up(&mut self) {
-        let mut highest_tree_height = 0;
         let size = self.matrix.len();
         for i in 0..size {
-            for j in size..0 {
-                let tree = self.matrix.get_mut(j).unwrap().get_mut(i).unwrap();
-                highest_tree_height = Self::update_tree(tree, highest_tree_height);
+            let mut highest_tree_height = 0;
+            for j in (0..size).rev() {
+                highest_tree_height = self.update_tree_column(j, i, highest_tree_height);
             }
         }
+    }
+
+    fn update_tree_column(&mut self, j: usize, i: usize, highest: u8) -> u8 {
+        let size = self.matrix.len();
+        let tree = self.matrix.get_mut(j).unwrap().get_mut(i).unwrap();
+        if j == 0 || j == size - 1 || i == 0 || i == size - 1 {
+            tree.visible = true;
+        }
+        Self::update_tree(tree, highest)
     }
 
     fn update_trees(row: &mut Vec<Tree>) {
@@ -60,22 +71,17 @@ impl Forest {
         let size = row.len();
         for (index, tree) in row.iter_mut().enumerate() {
             if index == 0 || index == size - 1 {
-                continue;
+                tree.visible = true;
             }
-            Self::update_tree(tree, highest_tree_height);
+            highest_tree_height = Self::update_tree(tree, highest_tree_height);
         }
     }
 
     fn update_tree(tree: &mut Tree, highest: u8) -> u8 {
-        if tree.visible {
-            return highest;
-        }
-
         if tree.higher_than(highest) {
             tree.visible = true;
             return tree.height;
         }
-
         highest
     }
 
