@@ -37,7 +37,7 @@ impl Rope {
 
     fn move_following_knot(&mut self, head_index: usize) {
         let head = *self.get_at(head_index);
-        let following_knot = self.get_mut_at(head_index - 1);
+        let following_knot = self.get_mut_at(head_index + 1);
 
         if following_knot.next_to(&head) {
             return;
