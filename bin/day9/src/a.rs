@@ -3,7 +3,7 @@ use crate::rope_simulator::RopeSimulator;
 
 pub fn solve() -> usize {
     let file = include_str!("input.txt");
-    let mut rope_simulator = RopeSimulator::new();
+    let mut rope_simulator = RopeSimulator::new(2);
 
     for line in file.lines() {
         let motion = Motion::from(line);
