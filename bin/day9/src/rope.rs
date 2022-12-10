@@ -30,21 +30,21 @@ impl Rope {
     }
 
     fn update_remainder(&mut self) {
-        for knot in 1..self.knots.len() {
-            self.move_tail(knot);
+        for knot in 0..self.knots.len() - 1 {
+            self.move_following_knot(knot);
         }
     }
 
-    fn move_tail(&mut self, other: usize) {
-        let head = *self.get_at(other - 1);
-        let tail = self.get_mut_at(other);
+    fn move_following_knot(&mut self, head_index: usize) {
+        let head = *self.get_at(head_index);
+        let following_knot = self.get_mut_at(head_index - 1);
 
-        if tail.next_to(&head) {
+        if following_knot.next_to(&head) {
             return;
         }
 
-        tail.x += Rope::get_diff_step(head.x, tail.x);
-        tail.y += Rope::get_diff_step(head.y, tail.y);
+        following_knot.x += Rope::get_diff_step(head.x, following_knot.x);
+        following_knot.y += Rope::get_diff_step(head.y, following_knot.y);
     }
 
     fn get_diff_step(x: i32, y: i32) -> i32 {
