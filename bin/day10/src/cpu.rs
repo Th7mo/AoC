@@ -1,3 +1,4 @@
+use crate::crt::Crt;
 use crate::instruction::Instruction;
 
 pub struct Cpu {
@@ -33,8 +34,20 @@ impl Cpu {
     fn eval(&mut self) {
         self.cycle_count += 1;
         if (self.cycle_count + 20) % 40 == 0 {
-            println!("{} {}", self.cycle_count, self.register_x);
             self.signal_strength += self.cycle_count * self.register_x;
+        }
+    }
+
+    pub fn draw(&mut self, instruction: &Instruction) {
+        Crt::draw_pixel(self.cycle_count, self.register_x);
+        self.cycle_count += 1;
+        match instruction {
+            Instruction::Noop => {}
+            Instruction::Addx(value) => {
+                Crt::draw_pixel(self.cycle_count, self.register_x);
+                self.cycle_count += 1;
+                self.update_register(*value);
+            }
         }
     }
 }
