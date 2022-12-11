@@ -1,4 +1,4 @@
-use crate::position::Position;
+use crate::rope::Position;
 use std::collections::HashSet;
 
 pub struct RopeHistory {

@@ -1,6 +1,6 @@
-use crate::motion::Motion;
+use crate::rope::Motion;
 use crate::rope::Rope;
-use crate::rope_history::RopeHistory;
+use crate::rope::RopeHistory;
 
 pub struct RopeSimulator {
     history: RopeHistory,

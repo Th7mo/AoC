@@ -1,6 +1,3 @@
-use crate::direction::Direction;
-use std::ops::Neg;
-
 #[derive(Copy, Clone)]
 pub struct Motion {
     pub direction: Direction,
@@ -14,7 +11,7 @@ impl Motion {
         };
         let mut amount: i32 = amount.parse().unwrap();
         match raw_motion.chars().next() {
-            Some('L') | Some('D') => amount = amount.neg(),
+            Some('L') | Some('D') => amount = -amount,
             _ => {}
         }
 
@@ -30,5 +27,21 @@ impl Motion {
 
     pub fn amount_of_steps(&self) -> i32 {
         self.amount.abs()
+    }
+}
+
+#[derive(Copy, Clone)]
+pub enum Direction {
+    X,
+    Y,
+}
+
+impl Direction {
+    pub fn from(raw_direction: &str) -> Self {
+        match raw_direction {
+            "L" | "R" => Direction::X,
+            "U" | "D" => Direction::Y,
+            _ => panic!("'{raw_direction}' is not a valid direction: [L, R, U, D]"),
+        }
     }
 }

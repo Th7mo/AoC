@@ -1,5 +1,4 @@
-use crate::motion::Motion;
-use crate::rope_simulator::RopeSimulator;
+use crate::rope::{Motion, RopeSimulator};
 
 pub fn solve() -> usize {
     let file = include_str!("input.txt");
