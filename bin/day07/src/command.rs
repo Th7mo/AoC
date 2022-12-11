@@ -1,10 +1,11 @@
-pub enum Command<'a> {
-    CD(&'a str),
-    File(&'a str),
+pub enum Command {
+    CD(String),
+    File(String),
 }
 
-impl<'a> Command<'a> {
-    pub fn from(command: &'a str) -> Self {
+impl Command {
+    pub fn from(command: &str) -> Self {
+        let command = command.to_string();
         match command {
             c if c.starts_with('$') => Self::CD(command),
             _ => Self::File(command),
