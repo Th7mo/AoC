@@ -1,4 +1,4 @@
-use crate::dir::Dir;
+use crate::device::Dir;
 
 pub struct FileManager {
     directories: Vec<Dir>,

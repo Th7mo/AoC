@@ -1,7 +1,7 @@
-use crate::command::Command;
-use crate::dir::Dir;
-use crate::dir_stack::DirStack;
-use crate::file_manager::FileManager;
+use crate::device::Command;
+use crate::device::Dir;
+use crate::device::DirStack;
+use crate::device::FileManager;
 
 pub struct Terminal {
     threshold: Option<u32>,
@@ -28,7 +28,7 @@ impl Terminal {
     }
 
     fn calculate_size_of_dirs(&mut self) {
-        let commands = include_str!("input.txt");
+        let commands = include_str!("../input.txt");
         self.execute_commands(commands);
     }
 

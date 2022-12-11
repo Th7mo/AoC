@@ -1,4 +1,4 @@
-use crate::dir::Dir;
+use crate::device::Dir;
 
 pub struct DirStack {
     stack: Vec<Dir>,

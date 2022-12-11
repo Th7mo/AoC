@@ -1,4 +1,4 @@
-use crate::terminal::Terminal;
+use crate::device::Terminal;
 
 pub fn solve() -> u32 {
     let mut terminal = Terminal::new();
