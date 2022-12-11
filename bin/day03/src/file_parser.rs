@@ -2,7 +2,7 @@ use crate::rucksack::Rucksack;
 use std::str::Lines;
 
 pub fn get_rucksacks() -> Vec<Rucksack> {
-    let file = include_str!("input.txt");
+    let file = include_str!("../res/input.txt");
     parse_file(file.lines())
 }
 

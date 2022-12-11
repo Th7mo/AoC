@@ -1,7 +1,7 @@
 use crate::rope::{Motion, RopeSimulator};
 
 pub fn solve() -> usize {
-    let file = include_str!("input.txt");
+    let file = include_str!("../res/input.txt");
     let mut rope_simulator = RopeSimulator::new(10);
 
     for line in file.lines() {

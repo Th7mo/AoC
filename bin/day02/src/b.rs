@@ -1,7 +1,7 @@
 use day02::parse_file;
 
 pub fn solve() {
-    let file = include_str!("input.txt");
+    let file = include_str!("../res/input.txt");
     let rounds = parse_file(file.lines());
     let mut total_score = 0;
 

@@ -28,7 +28,7 @@ impl Terminal {
     }
 
     fn calculate_size_of_dirs(&mut self) {
-        let commands = include_str!("../input.txt");
+        let commands = include_str!("../../res/input.txt");
         self.execute_commands(commands);
     }
 
