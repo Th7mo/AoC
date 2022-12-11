@@ -1,5 +1,5 @@
-use day3::a;
-use day3::b;
+use day03::a;
+use day03::b;
 
 fn main() {
     a::solve();

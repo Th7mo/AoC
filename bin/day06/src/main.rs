@@ -1,4 +1,4 @@
-use day6::{a, b};
+use day06::{a, b};
 
 fn main() {
     a::solve();

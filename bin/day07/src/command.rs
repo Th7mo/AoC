@@ -4,10 +4,9 @@ pub enum Command {
 }
 
 impl Command {
-    pub fn from(command: &str) -> Self {
-        let command = command.to_string();
-        match command {
-            c if c.starts_with('$') => Self::CD(command),
+    pub fn from(command: String) -> Self {
+        match command.chars().next().unwrap() {
+            '$' => Self::CD(command),
             _ => Self::File(command),
         }
     }

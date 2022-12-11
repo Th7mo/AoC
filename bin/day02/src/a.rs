@@ -1,4 +1,4 @@
-use day2::parse_file;
+use day02::parse_file;
 
 pub fn solve() {
     let file = include_str!("input.txt");

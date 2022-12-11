@@ -19,22 +19,17 @@ impl Cpu {
     }
 
     pub fn execute(&mut self, instruction: &Instruction) {
+        for _ in 0..instruction.clock_length() {
+            self.increase_cycle_count();
+            self.update_signal_strength();
+        }
         match instruction {
-            Instruction::Noop => self.noop(),
             Instruction::Addx(value) => self.addx(value),
+            Instruction::Noop => {}
         }
     }
 
-    fn noop(&mut self) {
-        self.increase_cycle_count();
-        self.update_signal_strength();
-    }
-
     fn addx(&mut self, value: &i32) {
-        self.increase_cycle_count();
-        self.update_signal_strength();
-        self.increase_cycle_count();
-        self.update_signal_strength();
         self.update_register(*value);
     }
 

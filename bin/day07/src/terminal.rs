@@ -37,7 +37,7 @@ impl Terminal {
             if Terminal::is_useless_command(terminal_line) {
                 continue;
             }
-            let line = Command::from(terminal_line);
+            let line = Command::from(terminal_line.to_string());
             self.interpreter_line(line);
         }
         self.drain_stack_remainder();
@@ -49,8 +49,8 @@ impl Terminal {
 
     fn interpreter_line(&mut self, line: Command) {
         match line {
-            Command::CD(line) => self.change_directory(line),
-            Command::File(line) => self.dir_stack.add_size_to_current_dir(line),
+            Command::CD(line) => self.change_directory(&line),
+            Command::File(line) => self.dir_stack.add_size_to_current_dir(&line),
         }
     }
 

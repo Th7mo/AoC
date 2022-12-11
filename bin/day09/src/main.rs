@@ -1,4 +1,4 @@
-use day9::{a, b};
+use day09::{a, b};
 
 fn main() {
     println!("{}", a::solve());
