@@ -3,9 +3,9 @@ use crate::instruction::Instruction;
 
 pub fn solve() {
     let file = include_str!("input.txt");
-    let mut cpu = Cpu::new();
+    let mut cpu = Cpu::new(true);
 
     for line in file.lines() {
-        cpu.draw(&Instruction::from(line));
+        cpu.execute(&Instruction::from(line));
     }
 }

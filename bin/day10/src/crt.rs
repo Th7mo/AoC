@@ -2,14 +2,18 @@ pub struct Crt;
 
 impl Crt {
     pub fn draw_pixel(current_cycle: i32, sprite_middle: i32) {
-        if Crt::sprite_in_range(current_cycle, sprite_middle) {
-            print!("#");
-        } else {
-            print!(".");
-        }
+        print!("{}", Crt::get_pixel(current_cycle, sprite_middle));
 
         if Crt::needs_new_line(current_cycle) {
             println!();
+        }
+    }
+
+    fn get_pixel(current_cycle: i32, sprite_middle: i32) -> char {
+        if Crt::sprite_in_range(current_cycle, sprite_middle) {
+            '#'
+        } else {
+            ' '
         }
     }
 

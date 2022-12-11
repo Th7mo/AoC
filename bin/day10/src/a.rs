@@ -3,7 +3,7 @@ use crate::instruction::Instruction;
 
 pub fn solve() -> i32 {
     let file = include_str!("input.txt");
-    let mut cpu = Cpu::new();
+    let mut cpu = Cpu::new(false);
 
     for line in file.lines() {
         cpu.execute(&Instruction::from(line));
